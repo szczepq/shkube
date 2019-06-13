@@ -1,0 +1,36 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shkube-deployment
+  labels:
+    app: shkube
+spec:
+  replicas: 1 #5
+  template:
+    metadata:
+      name: shkube
+      labels:
+        app: shkube
+    spec:
+      containers:
+      - name: shkube
+        image: shkube:local #shkubeacr.azurecr.io/shkube:v1 #shkubeacr.azurecr.io/shkube:v2
+        imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: shkube
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: shkube-service
+spec:
+  selector:
+    app: shkube
+  ports:
+    - port: 80
+  type: NodePort # LoadBalancer
