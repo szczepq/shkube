@@ -14,13 +14,12 @@ spec:
     spec:
       containers:
       - name: shkube
-        image: shkube:local #shkubeacr.azurecr.io/shkube:v1 #shkubeacr.azurecr.io/shkube:v2
+        image: shkubeacr.azurecr.io/shkube:latest #shkubeacr.azurecr.io/shkube:v2 shkube:local #
         imagePullPolicy: IfNotPresent
       restartPolicy: Always
   selector:
     matchLabels:
       app: shkube
-
 
 ---
 
@@ -33,4 +32,4 @@ spec:
     app: shkube
   ports:
     - port: 80
-  type: NodePort # LoadBalancer
+  type: LoadBalancer # NodePort # 

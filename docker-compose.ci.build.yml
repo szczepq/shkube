@@ -1,0 +1,9 @@
+﻿version: '3'
+
+services:
+  ci-build:
+    image: mcr.microsoft.com/dotnet/core/sdk:2.2-stretch
+    volumes:
+      - .:/src
+    working_dir: /src
+    command: /bin/bash -c "dotnet restore ./SHKube.sln && dotnet publish ./SHKube.sln -c Release -o ./obj/Docker/publish"
