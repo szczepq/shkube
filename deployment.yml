@@ -5,7 +5,7 @@ metadata:
   labels:
     app: shkube
 spec:
-  replicas: 1 #5
+  replicas: 1
   template:
     metadata:
       name: shkube
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: shkube
-        image: shkube:local #shkubeacr.azurecr.io/shkube:latest #shkubeacr.azurecr.io/shkube:v2 
+        image: shkube
         imagePullPolicy: IfNotPresent
       restartPolicy: Always
   selector:
@@ -32,4 +32,4 @@ spec:
     app: shkube
   ports:
     - port: 80
-  type: NodePort # LoadBalancer
+  type: LoadBalancer
