@@ -149,3 +149,97 @@ Now we can test our pipeline! Hit Save & queue.
 <p align="center">
   <img src="img/save.jpg" title="save and queue" />
 </p>
+
+Go to Pipelines, select the pipeline you have created and pick the newest Run. If it shines green then everything is ok. 
+<p align="center">
+  <img src="img/green.jpg" title="green" />
+</p>
+
+If not then you have to check which step want wrong.
+<p align="center">
+  <img src="img/job.jpg" title="job" />
+</p>
+
+Congratulations! Half of our plan is ready. We have an image, and image is available in your ACR. Let's check it out. 
+Please login to your Azure Portal and check if your image is in your ACR.
+<p align="center">
+  <img src="img/acr.jpg" title="acr" />
+</p>
+
+# Azure Release
+Go to Release tab and create a new one
+<p align="center">
+  <img src="img/release.jpg" title="release" />
+</p>
+
+Similary to pipeline I have selected `Empty job`
+<p align="center">
+  <img src="img/emptyjobr.jpg" title="empty job" />
+</p>
+
+Now click on `Add an artifact`, select your project and source.
+<p align="center">
+  <img src="img/addartifact.jpg" title="add artifact" />
+</p>
+
+Go to `Task` tab
+<p align="center">
+  <img src="img/task.jpg" title="task" />
+</p>
+
+Add `Kubectl` task
+<p align="center">
+  <img src="img/kubectl.jpg" title="kubectl" />
+</p>
+
+* change `Service connection type`
+* select `Azure subscription`
+* select `resource group`
+* select `Kubernetes claster`
+* pick `Apply` Command
+* check `Use configuration`
+<p align="center">
+  <img src="img/createdeployment.jpg" title="create deployment" />
+</p>
+
+And pick your `deployment.yml` file in `File path`
+<p align="center">
+  <img src="img/deployfile.jpg" title="deployment file" />
+</p>
+
+Expand `Advance` and check `Version spec` that match to the version of Kubernetes on Azure
+<p align="center">
+  <img src="img/version.jpg" title="kubernetes version" />
+</p>
+
+Add new Kubectl step because we will have to replace the name of your docker image to match the one on ACR.
+Pick everything as before but chance `Command` to be `set`. In `Arguments` input please put
+`image deployments/shkube-deployment shkube=shkubeacr.azurecr.io/shkube:$(Build.BuildId)`
+This command is tricky, we have to navigate to the container image - select right deployment and image by name.
+<p align="center">
+  <img src="img/arguments.jpg" title="arguments" />
+</p>
+
+We are specyfying the image version here, this is better practise then just use `:latest` because 
+latest image is always pointing to the newest one (that is created after each merge). 
+It could be ok for your dev but not for sure for production environment.
+<p align="center">
+  <img src="img/updateimage.jpg" title="update image" />
+</p>
+
+Click `Save` and `Create release` (top right) and go to Release to check if everything shines green.
+<p align="center">
+  <img src="img/releasesuccess.jpg" title="success" />
+</p>
+
+Ok let's go to console and check your services and pods
+<p align="center">
+  <img src="img/kubectlsvcpod.jpg" title="success" />
+</p>
+
+And navigate to IP of your service to check if it is running.
+<p align="center">
+  <img src="img/running.jpg" title="running" />
+</p>
+
+It is working! Congratulation! Your continous integration and delivery setup is ready to go. You can now use your pipeline to create another Release configuration for your test, stage or production environment.
